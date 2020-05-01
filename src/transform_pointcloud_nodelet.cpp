@@ -125,5 +125,5 @@ namespace transform_pointcloud {
 	};
 }
 
-PLUGINLIB_DECLARE_CLASS(transform_pointcloud, transformPointcloud, transform_pointcloud::transformPointcloud, nodelet::Nodelet);
+PLUGINLIB_EXPORT_CLASS(transform_pointcloud::transformPointcloud, nodelet::Nodelet);
 

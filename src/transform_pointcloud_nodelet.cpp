@@ -17,12 +17,12 @@ void transformPointcloud::onInit()
 	ReferenceFrame = reference_frame;
 
 	// Get the transform timeout.
-	double transform_timeout = 0.01;
+	double transform_timeout = 0.02;
 	nhp.getParam("transform_timeout", transform_timeout);
 	TransformTimeout = ros::Duration(transform_timeout);
 
 	// Get the polling timeout.
-	double polling_timeout = 0.01;
+	double polling_timeout = 0.02;
 	nhp.getParam("polling_timeout", polling_timeout);
 	PollingTimeout = ros::Duration(polling_timeout);
 

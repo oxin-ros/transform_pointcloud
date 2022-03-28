@@ -1,9 +1,10 @@
 <launch>
     <node pkg="nodelet" type="nodelet" name="test_nodelet"  args="manager" output="screen"/>
 
+    <!-- Transform the pointcloud to the base_link frame. -->
     <node pkg="nodelet" type="nodelet" name="pointcloud_transformer" args="load transform_pointcloud/transformPointcloud test_nodelet" output="screen">
-        <param name="to_frame" value="map"/>
-        <remap from="~input_pcl2" to="/camera/depth/points"/>
+        <param name="to_frame" value="base_link"/>
+        <remap from="~input_pcl2" to="/cloud/in"/>
         <remap from="~output_pcl2" to="/cloud/out"/>
     </node>
 

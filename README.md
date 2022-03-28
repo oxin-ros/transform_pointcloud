@@ -3,7 +3,7 @@ ROS nodelet that transforms pointcloud (`sensor_msgs/Pointcloud` or `sensor_msgs
 TF frame (e.g. from "camera_frame" to "base_link"). It uses `sensor_msgs/point_cloud_conversion.h` for conversion.
 It will publish both `Pointcloud` and `Pointcloud2` messages for any input type (if any node is subscribed to it)
 # Subscribed topics
-* `~input_pcl (sensor_msgs/Pointcloud)` input topic
+* `~input_pcl (sensor_msgs/Pointcloud)` input topic 
 * `~inptu_pcl2 (sensor_msgs/Pointcloud2)` input topic
 
 # Published topics
@@ -11,7 +11,9 @@ It will publish both `Pointcloud` and `Pointcloud2` messages for any input type 
 * `~output_pcl2 (sensor_msgs/Pointcloud2)` output topic
 
 # Parameters
-* `to_frame (string, default:base_link)` to what TF frame to transform the output
+* `to_frame (string, default:base_link)` To what TF frame to transform the output
+* `transform_timeout (double, default: 0.5 seconds)` How long to block before failing
+* `polling_timeout (double, default: 0.1 seconds)` How often to retest if failed
 
 # TF
 * required is the transform from frame that input pointcloud is to frame set by `to_frame` parameter

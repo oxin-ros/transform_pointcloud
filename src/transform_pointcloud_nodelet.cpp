@@ -8,21 +8,17 @@ void transformPointcloud::onInit()
 	ros::NodeHandle nhp = getPrivateNodeHandle();
 	
 	// Get the frame ID.
-	std::string reference_frame;
-	if (!nhp.getParam("to_frame", reference_frame))
-	{
-		ROS_ERROR("You must specify 'to_frame' parameter !");
-		exit(1);
-	}
+	std::string reference_frame = DEFAULT_REFERENCE_FRAME;
+	nhp.getParam("to_frame", reference_frame);
 	ReferenceFrame = reference_frame;
 
 	// Get the transform timeout.
-	double transform_timeout = 0.02;
+	double transform_timeout = DEFAULT_TRANSFORM_TIMEOUT;
 	nhp.getParam("transform_timeout", transform_timeout);
 	TransformTimeout = ros::Duration(transform_timeout);
 
 	// Get the polling timeout.
-	double polling_timeout = 0.02;
+	double polling_timeout = DEFAULT_POLLING_TIMEOUT;
 	nhp.getParam("polling_timeout", polling_timeout);
 	PollingTimeout = ros::Duration(polling_timeout);
 
@@ -66,8 +62,7 @@ bool transformPointcloud::getTransform(
 	}
 	catch (const tf::TransformException &e)
 	{
-		ROS_ERROR_STREAM(
-			"Pointcloud transform | Error in lookupTransform of " << child_frame << " in " << reference_frame);
+		ROS_ERROR_STREAM("Pointcloud transform | Error in lookupTransform of " << child_frame << " in " << reference_frame);
 		return false;
 	}
 	return true;
@@ -83,7 +78,12 @@ void transformPointcloud::pointcloudCB(const sensor_msgs::PointCloud::ConstPtr &
 
 	// Get the transform.
 	tf::StampedTransform tf_between_frames;
-	getTransform(ReferenceFrame, cloud_in->header.frame_id, tf_between_frames);
+	const bool transform_retrieved = getTransform(ReferenceFrame, cloud_in->header.frame_id, tf_between_frames);
+    if (!transform_retrieved)
+    {
+        // Return early since there wasn't a transform for the given frames.
+        return;
+    }
 
 	// Convert it to geometry_msg type.
 	geometry_msgs::TransformStamped tf_between_frames_geo;
@@ -126,7 +126,12 @@ void transformPointcloud::pointcloud2CB(const sensor_msgs::PointCloud2::ConstPtr
 
 	// Get the transform.
 	tf::StampedTransform tf_between_frames;
-	getTransform(ReferenceFrame, cloud_in->header.frame_id, tf_between_frames);
+	const bool transform_retrieved = getTransform(ReferenceFrame, cloud_in->header.frame_id, tf_between_frames);
+    if (!transform_retrieved)
+    {
+        // Return early since there wasn't a transform for the given frames.
+        return;
+    }
 
 	// Convert it to geometry_msg type.
 	geometry_msgs::TransformStamped tf_between_frames_geo;

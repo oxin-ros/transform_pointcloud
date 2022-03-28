@@ -40,6 +40,7 @@ namespace transform_pointcloud
 	public:
 		transformPointcloud() = default;
         ~transformPointcloud() = default;
+
     private:
         void onInit() override;
 
@@ -50,12 +51,19 @@ namespace transform_pointcloud
         // Publishers.
 		ros::Publisher PointCloudPublisher;
 		ros::Publisher PointCloud2Publisher;
+
         // Subscribers.
 		ros::Subscriber PointCloudSubscriber;
 		ros::Subscriber PointCloud2Subscriber;
 
-		std::string ReferenceFrame = "base_link";
+        // Parameters.
+		std::string ReferenceFrame;
         ros::Duration TransformTimeout;
         ros::Duration PollingTimeout;
+
+        // Defaults.
+        const std::string DEFAULT_REFERENCE_FRAME = "base_link";
+        static constexpr double DEFAULT_TRANSFORM_TIMEOUT = 0.4;
+        static constexpr double DEFAULT_POLLING_TIMEOUT = 0.1;
     };
 }
